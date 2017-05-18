@@ -1,0 +1,15 @@
+{
+  "name": "chess-server",
+  "version": "0.0.1",
+  "description": "Socket.io based server for realtime chess games.",
+  "main": "index.js",
+  "scripts": {
+    "start":"node app.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "4.15.3",
+    "socketio": "1.0.0"
+  }
+}
