@@ -4,12 +4,14 @@
   "description": "Socket.io based server for realtime chess games.",
   "main": "index.js",
   "scripts": {
-    "start":"node app.js"
+    "start": "node app.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "chess.js": "git@github.com:jhlywa/chess.js.git#master",
     "express": "4.15.3",
+    "node-pty": "0.6.5",
     "socketio": "1.0.0"
   }
 }
