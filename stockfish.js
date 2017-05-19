@@ -15,7 +15,6 @@ module.exports.getBestMove = (fen) => {
 
     function processOutput (data) {
       let message = String(data)
-      // console.log('console', message)
       const moveIndex = message.indexOf('bestmove')
       message = message.slice(moveIndex, message.length - 1)
       message = message.split('\n')[0]

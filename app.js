@@ -12,12 +12,10 @@ app.get('/', (req, res) => {
   res.send('Hello World')
 })
 
-app.get('/bestmove', (req, res) => {
+app.get('/bestmove', async (req, res) => {
   const fen = game.fen()
-  return Stockfish.getBestMove(fen)
-    .then((bestmove) => {
-      res.send(bestmove)
-    })
+  const bestmove = await Stockfish.getBestMove(fen)
+  res.send(bestmove)
 })
 
 app.post('/actions/reset', (req, res) => {
@@ -49,19 +47,17 @@ io.on('connection', (socket) => {
   socket.on('newgame', () => {
   })
 
-  socket.on('newmove', (moveObj) => {
+  socket.on('newmove', async (moveObj) => {
     game.move(moveObj.move)
     const fen = game.fen()
-    return Stockfish.getBestMove(fen)
-      .then((bestmove) => {
-        console.log('socket', bestmove)
-        game.move(bestmove, {sloppy: true})
+    const bestmove = await Stockfish.getBestMove(fen)
+    console.log('socket', bestmove)
+    game.move(bestmove, {sloppy: true})
 
-        io.emit('newmove', {
-          move: bestmove,
-          sender: -1
-        })
-      })
+    io.emit('newmove', {
+      move: bestmove,
+      sender: -1
+    })
   })
 
   socket.on('publickey', (key) => {
