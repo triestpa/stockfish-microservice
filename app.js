@@ -2,17 +2,27 @@ const app = require('express')()
 const http = require('http').Server(app)
 const io = require('socket.io')(http)
 const chess = require('chess.js').Chess
-const Ai = require('./ai')
 const Stockfish = require('./console')
 
-// let pgn = game.pgn()
-const ai = new Ai()
 let game = chess()
 
 Stockfish.setupBoard()
 
 app.get('/', (req, res) => {
   res.send('Hello World')
+})
+
+app.get('/bestmove', (req, res) => {
+  const fen = game.fen()
+  return Stockfish.getBestMove(fen)
+    .then((bestmove) => {
+      res.send(bestmove)
+    })
+})
+
+app.post('/actions/reset', (req, res) => {
+  game.reset()
+  res.send('OK')
 })
 
 function respond (msg) {
@@ -37,30 +47,22 @@ io.on('connection', (socket) => {
   })
 
   socket.on('newgame', () => {
-    // resetGame()
   })
 
   socket.on('newmove', (moveObj) => {
     game.move(moveObj.move)
     const fen = game.fen()
     return Stockfish.getBestMove(fen)
-      .then((bestmoveStock) => {
-        console.log('socket', bestmoveStock)
-        game.move(bestmoveStock, {sloppy: true})
+      .then((bestmove) => {
+        console.log('socket', bestmove)
+        game.move(bestmove, {sloppy: true})
 
         io.emit('newmove', {
-          move: bestmoveStock,
+          move: bestmove,
           sender: -1
         })
       })
   })
-    //
-    // console.log(tempGame.ascii())
-    // const bestmove = await ai.getBestMove(tempGame)
-    // tempGame.move(bestmove)
-    // game = tempGame
-    // console.log(tempGame.ascii())
-
 
   socket.on('publickey', (key) => {
     console.log('publickey', key)

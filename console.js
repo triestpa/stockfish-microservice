@@ -42,7 +42,6 @@ module.exports.getBestMove = (fen) => {
       const moveIndex = message.indexOf('bestmove')
       message = message.slice(moveIndex, message.length - 1)
       message = message.split('\n')[0]
-      console.log('console', message)
       const bestmove = message.slice(9, 13)
 
       stockfish.stdin.removeListener('data', processOutput)
@@ -52,19 +51,6 @@ module.exports.getBestMove = (fen) => {
     }
   })
 }
-
-// stockfish.stdout.on('data', (data) => {
-//   let message = String(data)
-//   // console.log(message.slice(0, 7))
-//   const moveIndex = message.indexOf('bestmove')
-//   if (moveIndex > -1) {
-//     message = message.slice(moveIndex, message.length - 1)
-//     message = message.split('\n')[0]
-//     console.log(message)
-//     const bestmove = message.slice(9, 13)
-//     console.log(bestmove)
-//   }
-// })
 
 stockfish.stderr.on('data', (data) => {
   console.log(`stderr: ${data}`)
