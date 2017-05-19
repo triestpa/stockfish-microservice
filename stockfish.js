@@ -1,28 +1,5 @@
-// var os = require('os')
-// var pty = require('node-pty')
-// var shell = os.platform() === 'win32' ? 'powershell.exe' : 'bash'
-
-// var ptyProcess = pty.spawn(shell, [], {
-//   name: 'xterm-color',
-//   cols: 80,
-//   rows: 30,
-//   cwd: process.env.HOME,
-//   env: process.env
-// })
-
-// ptyProcess.on('data', function (data) {
-//   console.log(data)
-// })
-
-// ptyProcess.write('ls\r')
-// ptyProcess.resize(100, 40)
-// ptyProcess.write('ls\r')
-
 const spawn = require('child_process').spawn
 const stockfish = spawn('stockfish')
-
-// stockfish.stdin.write('position startpos\n')
-// stockfish.stdin.write('go depth 10\n')
 
 module.exports.setupBoard = () => {
   stockfish.stdin.write('position startpos\n')
