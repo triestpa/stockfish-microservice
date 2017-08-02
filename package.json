@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "1.17.2",
     "chess.js": "git+https://github.com/jhlywa/chess.js.git",
     "express": "4.15.3",
     "node-pty": "0.6.5",
