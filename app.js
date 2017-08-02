@@ -1,5 +1,7 @@
 const app = require('express')()
+const bodyParser = require('body-parser')
 const http = require('http').Server(app)
+
 const io = require('socket.io')(http)
 const chess = require('chess.js').Chess
 const Stockfish = require('./stockfish')
@@ -8,12 +10,23 @@ let game = chess()
 
 Stockfish.setupBoard()
 
+app.use(bodyParser.json()); // support json encoded bodies
+app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
+
 app.get('/', (req, res) => {
   res.send('Hello World')
 })
 
 app.get('/bestmove', async (req, res) => {
-  const fen = game.fen()
+  let fen = req.query.fen
+  if (!fen) {
+    // Get new game board
+    fen = chess().fen()
+  } else if (!chess().load(fen)) {
+    // Reject if invalid FEN
+    return res.status(400).send('Invalid FEN')
+  }
+
   const bestmove = await Stockfish.getBestMove(fen)
   res.send(bestmove)
 })
@@ -22,14 +35,6 @@ app.post('/actions/reset', (req, res) => {
   game.reset()
   res.send('OK')
 })
-
-function respond (msg) {
-  io.emit('message', {
-    sender: -1,
-    encrypted: false,
-    content: 'hello world'
-  })
-}
 
 io.on('connection', (socket) => {
   io.emit('new connection', null)
