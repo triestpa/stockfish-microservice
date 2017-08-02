@@ -9,7 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "chess.js": "git@github.com:jhlywa/chess.js.git#master",
+    "chess.js": "git+https://github.com/jhlywa/chess.js.git",
     "express": "4.15.3",
     "node-pty": "0.6.5",
     "socketio": "1.0.0"
