@@ -1,6 +1,9 @@
 {
   "name": "chess-server",
   "version": "0.0.1",
+  "engines": {
+    "node": "8.1.4"
+  },
   "description": "Socket.io based server for realtime chess games.",
   "main": "index.js",
   "scripts": {
