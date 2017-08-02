@@ -31,7 +31,7 @@ class Stockfish {
    * Receive a FEN string, and return a promise
    * that will resolve with the recommended move.
   */
-  getBestMove (fen) {
+  getBestMove (fen, difficulty = 3) {
     return new Promise((resolve, reject) => {
       /** Process the stockfish output */
       const processOutput = (data) => {
@@ -45,9 +45,12 @@ class Stockfish {
 
         this.stockfish.stdin.removeListener('data', processOutput)
         if (bestmove.length > 0) {
+          console.log(`Best Move - ${bestmove}`)
           resolve(bestmove)
         }
       }
+
+      console.log(`Calculating with difficulty ${difficulty}`)
 
       // Set result processing function
       this.stockfish.stdout.on('data', (data) => processOutput(data))
@@ -56,7 +59,7 @@ class Stockfish {
       this.stockfish.stdin.write(`position fen ${fen}\n`)
 
       // Set difficulty
-      this.stockfish.stdin.write('go depth 10\n')
+      this.stockfish.stdin.write(`go depth ${difficulty}\n`)
     })
   }
 }
