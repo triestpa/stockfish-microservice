@@ -7,7 +7,8 @@
   "description": "Socket.io based server for realtime chess games.",
   "main": "index.js",
   "scripts": {
-    "start": "node app.js"
+    "start": "node app.js",
+    "deploy": "heroku container:push web"
   },
   "author": "",
   "license": "ISC",
